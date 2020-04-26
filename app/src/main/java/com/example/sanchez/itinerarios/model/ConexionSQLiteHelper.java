@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
     //
-    final String CREAR_TABLA_ITINERARIO = "CREATE TABLE ITINERARIO(id INTEGER, area TEXT, fecha TEXT, horaInicio TEXT, horaFin TEXT, solicitud TEXT, actividad TEXT)";
+    final String CREAR_TABLA_ITINERARIO = "CREATE TABLE itinerario(id INTEGER PRIMARY KEY AUTOINCREMENT, area TEXT, fecha TEXT, horaInicio TEXT, horaFin TEXT, solicitud TEXT, actividad TEXT)";
 
     //Creamos la base da datos
     public ConexionSQLiteHelper(Context context,String name,SQLiteDatabase.CursorFactory factory, int version) {

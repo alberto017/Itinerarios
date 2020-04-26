@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="combo_areas">
+        <item>Almacen</item>
+        <item>Contabilidad</item>
+        <item>Mantenimiento</item>
+        <item>Maquinaria</item>
+        <item>Produccion</item>
+        <item>Recepcion</item>
+        <item>R.H</item>
+        <item>Sistemas</item>
+        <item>Vigilancia</item>
+    </string-array>
+</resources>

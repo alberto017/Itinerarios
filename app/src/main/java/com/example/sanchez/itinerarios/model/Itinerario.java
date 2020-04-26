@@ -1,8 +1,10 @@
 package com.example.sanchez.itinerarios.model;
 
-public class Itinerario {
+import java.io.Serializable;
 
-    private Integer id;
+public class Itinerario implements Serializable {
+
+    private int id;
     private String area;
     private String fecha;
     private String horaInicio;
@@ -14,7 +16,7 @@ public class Itinerario {
 
     }
 
-    public Itinerario(Integer id, String area, String fecha, String horaInicio, String horaFin, String solicitud, String actividad) {
+    public Itinerario(int id, String area, String fecha, String horaInicio, String horaFin, String solicitud, String actividad) {
         this.id = id;
         this.area = area;
         this.fecha = fecha;
@@ -22,14 +24,13 @@ public class Itinerario {
         this.horaFin = horaFin;
         this.solicitud = solicitud;
         this.actividad = actividad;
+    }//Itinerario
 
-    }
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
