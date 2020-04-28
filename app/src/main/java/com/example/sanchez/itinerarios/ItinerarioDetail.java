@@ -10,6 +10,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -76,7 +79,6 @@ public class ItinerarioDetail extends AppCompatActivity {
         //Adaptador para llenar el Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.combo_areas, android.R.layout.simple_spinner_item);
         spnDetailArea.setAdapter(adapter);
-
 
         spnDetailArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -178,6 +180,7 @@ public class ItinerarioDetail extends AppCompatActivity {
         });
     }//onCreate
 
+
     private void actualizarItinerario() {
         SQLiteDatabase sqLiteDatabase = conexionSQLiteHelper.getWritableDatabase();
 
@@ -190,7 +193,7 @@ public class ItinerarioDetail extends AppCompatActivity {
 
     private void cargarDatos() {
         Bundle bundle = this.getIntent().getExtras();
-        if(bundle != null){
+        if (bundle != null) {
             lblDetailNoSolicitud.setText(String.valueOf(bundle.getInt("noSolicitudDetail")));
             lblDetailArea.setText(bundle.getString("areaDetail"));
             lblDetailDate.setText(bundle.getString("fechaDetail"));

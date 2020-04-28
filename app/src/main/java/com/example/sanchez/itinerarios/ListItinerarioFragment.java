@@ -1,30 +1,49 @@
 package com.example.sanchez.itinerarios;
 
 
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.sanchez.itinerarios.model.ConexionSQLiteHelper;
 import com.example.sanchez.itinerarios.model.Itinerario;
 
 import java.sql.SQLInput;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import static android.content.ContentValues.TAG;
 
 
 /**
@@ -32,28 +51,99 @@ import java.util.ArrayList;
  */
 public class ListItinerarioFragment extends Fragment {
 
+    //Declaracion de variables
     private RecyclerView rvItinerario;
     private FloatingActionButton fbAddReservation;
     private FrameLayout flListItinerario;
-
     private ArrayList<Itinerario> itinerarioArrayList;
     private ConexionSQLiteHelper conexionSQLiteHelper;
-
     private ItinerarioAdapter itinerarioAdapter = null;
+    String valueDate = "";
 
 
     public ListItinerarioFragment() {
         // Required empty public constructor
-    }
+    }//ListItinerarioFragment
 
+    //Este metodo se ejecutara primero dentro del fragment
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        //Pendiente
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }//onCreate
 
+    //Inflamos nuestro menu dentro del activity
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.about_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }//onCreateOptionsMenu
+
+    //Seleccion del item menu
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.itemSearch:
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                alertDialog.setMessage("Seleccione la fecha del itinerario")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                Calendar calendar = Calendar.getInstance();
+                                final int year = calendar.get(Calendar.YEAR);
+                                final int month = calendar.get(Calendar.MONTH);
+                                final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                                        android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                                        //month = month + 1;
+                                        Log.d(TAG, "onDateSet: mm/dd/yyyy: " + month + "/" + day + "/" + year);
+                                        String date = day + "/" + (month + 1) + "/" + year;
+                                        buscarItinerario(new Itinerario(),date);
+                                        //Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
+                                    }//onDateSet
+                                },year, month, day);
+                                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                datePickerDialog.show();
+                            }//onClick
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }//onClick
+                        });
+                AlertDialog title = alertDialog.create();
+                title.setTitle("Search Itinerario");
+                title.show();
+
+                break;
+            case R.id.itemExit:
+                Toast.makeText(getContext(), "¡Ha salido de la aplicacion", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.itemAbout:
+                Toast.makeText(getContext(), "¡Ventana desarrolladores no disponible", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.itemOtros:
+                Toast.makeText(getContext(), "¡Ventana otros no disponible", Toast.LENGTH_SHORT).show();
+                break;
+        }//switch
+        return super.onOptionsItemSelected(item);
+    }//onOptionsItemSelected
+
+    //Referenciamos todas nuestras variables
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list_itinerario, container, false);
 
-        //Enlazamos los componentes
         rvItinerario = view.findViewById(R.id.rvItinerario);
         fbAddReservation = view.findViewById(R.id.fbAddReservation);
         flListItinerario = getActivity().findViewById(R.id.flItinerarioActivity);
@@ -75,6 +165,7 @@ public class ListItinerarioFragment extends Fragment {
         return view;
     }//onCreateView
 
+    //Metodo consultaItinerarioSQL
     private void consultaItinerarioSQL() {
         SQLiteDatabase sqLiteDatabase = conexionSQLiteHelper.getReadableDatabase();
         Itinerario itinerario = null;
@@ -94,7 +185,7 @@ public class ListItinerarioFragment extends Fragment {
         }//while
     }//consultaPersonasSQL
 
-
+    //Declaramos nuestros metodos
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -117,7 +208,6 @@ public class ListItinerarioFragment extends Fragment {
                 startActivity(itinerarioDetail);
             }//onClick
         });
-
 
         //Evento onClick de FloattingButton
         fbAddReservation.setOnClickListener(new View.OnClickListener() {
@@ -144,11 +234,10 @@ public class ListItinerarioFragment extends Fragment {
         }//if
     }//buscarItinerario
 
-
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(flListItinerario.getId(), fragment);
         fragmentTransaction.commit();
     }//setFragment
 
-}
+}//LastItinerarioFragment

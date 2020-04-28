@@ -88,21 +88,18 @@ public class ReservationFragment extends Fragment /*implements TimePickerDialog.
 
         //Enlazamos los componentes
         flReservation = getActivity().findViewById(R.id.flItinerarioActivity);
-
         lblArea = view.findViewById(R.id.lblArea);
         spnArea = view.findViewById(R.id.spnArea);
-
         lblDate = view.findViewById(R.id.lblDate);
         btnDate = view.findViewById(R.id.btnDate);
-
         lblStart = view.findViewById(R.id.lblStart);
         btnStart = view.findViewById(R.id.btnStart);
-
         lblEnd = view.findViewById(R.id.lblEnd);
         btnEnd = view.findViewById(R.id.btnEnd);
-
         edtRequest = view.findViewById(R.id.edtRequest);
         edtDescription = view.findViewById(R.id.edtDescription);
+        btnSave = view.findViewById(R.id.btnSave);
+        btnCancel = view.findViewById(R.id.btnCancel);
 
         //Adaptador para llenar el Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.combo_areas, android.R.layout.simple_spinner_item);
@@ -207,7 +204,6 @@ public class ReservationFragment extends Fragment /*implements TimePickerDialog.
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //RegisterUser();
                 RegisterUserSQL();
                 Toast.makeText(getContext(), "¡Reservation has been saved sucessfull!", Toast.LENGTH_SHORT);
                 setFragment(new ListItinerarioFragment());
